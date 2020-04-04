@@ -1,0 +1,29 @@
+type User {
+  id: ID! @id
+  email: String! @unique
+  password: String!
+  nickName: String!
+  birth: String!
+}
+
+type Todos {
+  id: ID! @id
+  createdBy: User!
+  pomo: [Pomo]!
+  date: String! @unique
+}
+
+type Pomo {
+  id: ID! @id
+  createdBy: User!
+  content: String!
+  tags: [Tag]!
+  status: String!
+  start: String
+  finish: String
+}
+
+type Tag {
+  id: ID! @id
+  content: String!
+}
