@@ -4,28 +4,4 @@ type User {
   password: String
   nickName: String!
   birth: String!
-  googleId: String
-}
-
-type Todos {
-  id: ID!
-  createdBy: User!
-  pomo: [Pomo]!
-  date: String!
-}
-
-type Pomo {
-  id: ID!
-  createdBy: User!
-  content: String!
-  tags: [Tag]!
-  status: String!
-  date: String!
-  start: String
-  finish: String
-}
-
-type Tag {
-  id: ID!
-  content: String!
 }

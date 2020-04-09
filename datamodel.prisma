@@ -7,24 +7,3 @@ type User {
   googleId: String @unique
 }
 
-type Pomo {
-  id: ID! @id
-  createdBy: User!
-  todos: [Todos]!
-  date: String! @unique
-}
-
-type Todo {
-  id: ID! @id
-  createdBy: User!
-  content: String!
-  tags: [Tags]!
-  status: String!
-  start: String
-  finish: String
-}
-
-type Tag {
-  id: ID! @id
-  content: String!
-}
