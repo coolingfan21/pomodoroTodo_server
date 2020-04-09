@@ -1,18 +1,28 @@
 import passport from "passport";
 import { Strategy, ExtractJwt } from "passport-jwt";
+import { OAuth2Strategy } from "passport-google-oauth";
+// import { Strategy } from "passport-github";
+
 import { prisma } from "../generated/prisma-client";
 
 import dotenv from "dotenv";
 dotenv.config();
 
+// 토큰 인증
 const jwtOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), //Authorization Bearer에서 jwt 토큰를 찾는 역할;;
   secretOrKey: process.env.JWT_SECRET
 };
 
+const googleOptions = {
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  callbackURL: process.env.GOOGLE_CALLBACK_URI
+};
+
 //payload로 넘겨받은 정보를 이용해 db에서 해당 유저 정보를 가져온다.
 //user가있으면 done으로 넘겨준다.
-const verifyUser = async (payload, done) => {
+const verifyUser_Token = async (payload, done) => {
   try {
     const user = await prisma.user({ id: payload.id });
 
@@ -26,6 +36,26 @@ const verifyUser = async (payload, done) => {
   }
 };
 
+const verifyUser_OAuth = (accessToken, refreshToken, profile, done) => {
+  prisma.createUser({ googleId: profile.id }, (err, user) => {
+    return done(err, user);
+  });
+  return passport;
+};
+// async (payload, done) => {
+//   try {
+//     const user = await prisma.user({ id: payload.id });
+
+//     if (user !== null) {
+//       return done(null, user);
+//     } else {
+//       return done(null, false);
+//     }
+//   } catch (error) {
+//     return done(error, false);
+//   }
+// };
+
 //전달 받은 user를 request 객체에 user정보를 붙여준다.
 export const authenticateJwt = (req, res, next) => {
   passport.authenticate("jwt", { session: false }, (error, user) => {
@@ -36,7 +66,8 @@ export const authenticateJwt = (req, res, next) => {
   })(req, res, next);
 };
 
-passport.use(new Strategy(jwtOptions, verifyUser));
+passport.use(new Strategy(jwtOptions, verifyUser_Token));
+passport.use(new OAuth2Strategy(googleOptions, verifyUser_OAuth));
 
 //토큰을해석해서 callback함수인 verifyUser에게 넘겨준다.
 // ..strategy을 사용하면 그 strategy 가 모든 작업을 한 후에 결과물을 payload에 전달을 해준다.

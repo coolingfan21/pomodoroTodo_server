@@ -8,18 +8,22 @@ const HASHSECRET = process.env.HASHSECRET;
 export default {
   Mutation: {
     createUser: async (_, args) => {
-      const { email, password, nickName, birth } = args;
+      const { email, password, nickName, birth, googleId } = args;
 
-      const hash = crypto.createHmac("sha256", HASHSECRET);
-      hash.update(password);
-      const output = hash.digest("hex");
+      let output;
+      if (password) {
+        const hash = crypto.createHmac("sha256", HASHSECRET);
+        hash.update(password);
+        output = hash.digest("hex");
+      }
 
       try {
         await prisma.createUser({
           email,
-          password: output,
+          password: output ? output : "",
           nickName,
-          birth
+          birth,
+          googleId: googleId ? googleId : ""
         });
         return true;
       } catch (error) {

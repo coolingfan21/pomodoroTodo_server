@@ -3,6 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var prisma_lib_1 = require("prisma-client-lib");
 var typeDefs = require("./prisma-schema").typeDefs;
 
+import dotenv from "dotenv";
+dotenv.config();
+const backendpoint = process.env.BACKENDPOINT;
+
 var models = [
   {
     name: "User",
@@ -24,6 +28,6 @@ var models = [
 exports.Prisma = prisma_lib_1.makePrismaClientClass({
   typeDefs,
   models,
-  endpoint: `https://us1.prisma.sh/coolingfan21-d5b458/pomo_server/dev`
+  endpoint: backendpoint
 });
 exports.prisma = new exports.Prisma();
