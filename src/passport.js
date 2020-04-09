@@ -60,6 +60,7 @@ const verifyUser_OAuth = (accessToken, refreshToken, profile, done) => {
 export const authenticateJwt = (req, res, next) => {
   passport.authenticate("jwt", { session: false }, (error, user) => {
     if (user) {
+      console.log("user in authenticateJwt  : ", user);
       req.user = user;
     }
     next();

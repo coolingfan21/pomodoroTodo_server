@@ -3,7 +3,19 @@ module.exports = {
   // Please don't change this file manually but run `prisma generate` to update it.
   // For more information, please read the docs: https://www.prisma.io/docs/prisma-client/
 
-/* GraphQL */ `type AggregateUser {
+/* GraphQL */ `type AggregatePomo {
+  count: Int!
+}
+
+type AggregateTag {
+  count: Int!
+}
+
+type AggregateTodo {
+  count: Int!
+}
+
+type AggregateUser {
   count: Int!
 }
 
@@ -14,6 +26,24 @@ type BatchPayload {
 scalar Long
 
 type Mutation {
+  createPomo(data: PomoCreateInput!): Pomo!
+  updatePomo(data: PomoUpdateInput!, where: PomoWhereUniqueInput!): Pomo
+  updateManyPomoes(data: PomoUpdateManyMutationInput!, where: PomoWhereInput): BatchPayload!
+  upsertPomo(where: PomoWhereUniqueInput!, create: PomoCreateInput!, update: PomoUpdateInput!): Pomo!
+  deletePomo(where: PomoWhereUniqueInput!): Pomo
+  deleteManyPomoes(where: PomoWhereInput): BatchPayload!
+  createTag(data: TagCreateInput!): Tag!
+  updateTag(data: TagUpdateInput!, where: TagWhereUniqueInput!): Tag
+  updateManyTags(data: TagUpdateManyMutationInput!, where: TagWhereInput): BatchPayload!
+  upsertTag(where: TagWhereUniqueInput!, create: TagCreateInput!, update: TagUpdateInput!): Tag!
+  deleteTag(where: TagWhereUniqueInput!): Tag
+  deleteManyTags(where: TagWhereInput): BatchPayload!
+  createTodo(data: TodoCreateInput!): Todo!
+  updateTodo(data: TodoUpdateInput!, where: TodoWhereUniqueInput!): Todo
+  updateManyTodoes(data: TodoUpdateManyMutationInput!, where: TodoWhereInput): BatchPayload!
+  upsertTodo(where: TodoWhereUniqueInput!, create: TodoCreateInput!, update: TodoUpdateInput!): Todo!
+  deleteTodo(where: TodoWhereUniqueInput!): Todo
+  deleteManyTodoes(where: TodoWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
@@ -39,7 +69,124 @@ type PageInfo {
   endCursor: String
 }
 
+type Pomo {
+  id: ID!
+  createdBy: User!
+  todo(where: TodoWhereInput, orderBy: TodoOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Todo!]
+  date: String!
+}
+
+type PomoConnection {
+  pageInfo: PageInfo!
+  edges: [PomoEdge]!
+  aggregate: AggregatePomo!
+}
+
+input PomoCreateInput {
+  id: ID
+  createdBy: UserCreateOneInput!
+  todo: TodoCreateManyInput
+  date: String!
+}
+
+type PomoEdge {
+  node: Pomo!
+  cursor: String!
+}
+
+enum PomoOrderByInput {
+  id_ASC
+  id_DESC
+  date_ASC
+  date_DESC
+}
+
+type PomoPreviousValues {
+  id: ID!
+  date: String!
+}
+
+type PomoSubscriptionPayload {
+  mutation: MutationType!
+  node: Pomo
+  updatedFields: [String!]
+  previousValues: PomoPreviousValues
+}
+
+input PomoSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: PomoWhereInput
+  AND: [PomoSubscriptionWhereInput!]
+  OR: [PomoSubscriptionWhereInput!]
+  NOT: [PomoSubscriptionWhereInput!]
+}
+
+input PomoUpdateInput {
+  createdBy: UserUpdateOneRequiredInput
+  todo: TodoUpdateManyInput
+  date: String
+}
+
+input PomoUpdateManyMutationInput {
+  date: String
+}
+
+input PomoWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  createdBy: UserWhereInput
+  todo_every: TodoWhereInput
+  todo_some: TodoWhereInput
+  todo_none: TodoWhereInput
+  date: String
+  date_not: String
+  date_in: [String!]
+  date_not_in: [String!]
+  date_lt: String
+  date_lte: String
+  date_gt: String
+  date_gte: String
+  date_contains: String
+  date_not_contains: String
+  date_starts_with: String
+  date_not_starts_with: String
+  date_ends_with: String
+  date_not_ends_with: String
+  AND: [PomoWhereInput!]
+  OR: [PomoWhereInput!]
+  NOT: [PomoWhereInput!]
+}
+
+input PomoWhereUniqueInput {
+  id: ID
+  date: String
+}
+
 type Query {
+  pomo(where: PomoWhereUniqueInput!): Pomo
+  pomoes(where: PomoWhereInput, orderBy: PomoOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Pomo]!
+  pomoesConnection(where: PomoWhereInput, orderBy: PomoOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PomoConnection!
+  tag(where: TagWhereUniqueInput!): Tag
+  tags(where: TagWhereInput, orderBy: TagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Tag]!
+  tagsConnection(where: TagWhereInput, orderBy: TagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TagConnection!
+  todo(where: TodoWhereUniqueInput!): Todo
+  todoes(where: TodoWhereInput, orderBy: TodoOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Todo]!
+  todoesConnection(where: TodoWhereInput, orderBy: TodoOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TodoConnection!
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
@@ -47,7 +194,477 @@ type Query {
 }
 
 type Subscription {
+  pomo(where: PomoSubscriptionWhereInput): PomoSubscriptionPayload
+  tag(where: TagSubscriptionWhereInput): TagSubscriptionPayload
+  todo(where: TodoSubscriptionWhereInput): TodoSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+}
+
+type Tag {
+  id: ID!
+  content: String!
+}
+
+type TagConnection {
+  pageInfo: PageInfo!
+  edges: [TagEdge]!
+  aggregate: AggregateTag!
+}
+
+input TagCreateInput {
+  id: ID
+  content: String!
+}
+
+input TagCreateManyInput {
+  create: [TagCreateInput!]
+  connect: [TagWhereUniqueInput!]
+}
+
+type TagEdge {
+  node: Tag!
+  cursor: String!
+}
+
+enum TagOrderByInput {
+  id_ASC
+  id_DESC
+  content_ASC
+  content_DESC
+}
+
+type TagPreviousValues {
+  id: ID!
+  content: String!
+}
+
+input TagScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  content: String
+  content_not: String
+  content_in: [String!]
+  content_not_in: [String!]
+  content_lt: String
+  content_lte: String
+  content_gt: String
+  content_gte: String
+  content_contains: String
+  content_not_contains: String
+  content_starts_with: String
+  content_not_starts_with: String
+  content_ends_with: String
+  content_not_ends_with: String
+  AND: [TagScalarWhereInput!]
+  OR: [TagScalarWhereInput!]
+  NOT: [TagScalarWhereInput!]
+}
+
+type TagSubscriptionPayload {
+  mutation: MutationType!
+  node: Tag
+  updatedFields: [String!]
+  previousValues: TagPreviousValues
+}
+
+input TagSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: TagWhereInput
+  AND: [TagSubscriptionWhereInput!]
+  OR: [TagSubscriptionWhereInput!]
+  NOT: [TagSubscriptionWhereInput!]
+}
+
+input TagUpdateDataInput {
+  content: String
+}
+
+input TagUpdateInput {
+  content: String
+}
+
+input TagUpdateManyDataInput {
+  content: String
+}
+
+input TagUpdateManyInput {
+  create: [TagCreateInput!]
+  update: [TagUpdateWithWhereUniqueNestedInput!]
+  upsert: [TagUpsertWithWhereUniqueNestedInput!]
+  delete: [TagWhereUniqueInput!]
+  connect: [TagWhereUniqueInput!]
+  set: [TagWhereUniqueInput!]
+  disconnect: [TagWhereUniqueInput!]
+  deleteMany: [TagScalarWhereInput!]
+  updateMany: [TagUpdateManyWithWhereNestedInput!]
+}
+
+input TagUpdateManyMutationInput {
+  content: String
+}
+
+input TagUpdateManyWithWhereNestedInput {
+  where: TagScalarWhereInput!
+  data: TagUpdateManyDataInput!
+}
+
+input TagUpdateWithWhereUniqueNestedInput {
+  where: TagWhereUniqueInput!
+  data: TagUpdateDataInput!
+}
+
+input TagUpsertWithWhereUniqueNestedInput {
+  where: TagWhereUniqueInput!
+  update: TagUpdateDataInput!
+  create: TagCreateInput!
+}
+
+input TagWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  content: String
+  content_not: String
+  content_in: [String!]
+  content_not_in: [String!]
+  content_lt: String
+  content_lte: String
+  content_gt: String
+  content_gte: String
+  content_contains: String
+  content_not_contains: String
+  content_starts_with: String
+  content_not_starts_with: String
+  content_ends_with: String
+  content_not_ends_with: String
+  AND: [TagWhereInput!]
+  OR: [TagWhereInput!]
+  NOT: [TagWhereInput!]
+}
+
+input TagWhereUniqueInput {
+  id: ID
+}
+
+type Todo {
+  id: ID!
+  createdBy: User!
+  content: String!
+  tag(where: TagWhereInput, orderBy: TagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Tag!]
+  status: String!
+  start: String
+  finish: String
+}
+
+type TodoConnection {
+  pageInfo: PageInfo!
+  edges: [TodoEdge]!
+  aggregate: AggregateTodo!
+}
+
+input TodoCreateInput {
+  id: ID
+  createdBy: UserCreateOneInput!
+  content: String!
+  tag: TagCreateManyInput
+  status: String!
+  start: String
+  finish: String
+}
+
+input TodoCreateManyInput {
+  create: [TodoCreateInput!]
+  connect: [TodoWhereUniqueInput!]
+}
+
+type TodoEdge {
+  node: Todo!
+  cursor: String!
+}
+
+enum TodoOrderByInput {
+  id_ASC
+  id_DESC
+  content_ASC
+  content_DESC
+  status_ASC
+  status_DESC
+  start_ASC
+  start_DESC
+  finish_ASC
+  finish_DESC
+}
+
+type TodoPreviousValues {
+  id: ID!
+  content: String!
+  status: String!
+  start: String
+  finish: String
+}
+
+input TodoScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  content: String
+  content_not: String
+  content_in: [String!]
+  content_not_in: [String!]
+  content_lt: String
+  content_lte: String
+  content_gt: String
+  content_gte: String
+  content_contains: String
+  content_not_contains: String
+  content_starts_with: String
+  content_not_starts_with: String
+  content_ends_with: String
+  content_not_ends_with: String
+  status: String
+  status_not: String
+  status_in: [String!]
+  status_not_in: [String!]
+  status_lt: String
+  status_lte: String
+  status_gt: String
+  status_gte: String
+  status_contains: String
+  status_not_contains: String
+  status_starts_with: String
+  status_not_starts_with: String
+  status_ends_with: String
+  status_not_ends_with: String
+  start: String
+  start_not: String
+  start_in: [String!]
+  start_not_in: [String!]
+  start_lt: String
+  start_lte: String
+  start_gt: String
+  start_gte: String
+  start_contains: String
+  start_not_contains: String
+  start_starts_with: String
+  start_not_starts_with: String
+  start_ends_with: String
+  start_not_ends_with: String
+  finish: String
+  finish_not: String
+  finish_in: [String!]
+  finish_not_in: [String!]
+  finish_lt: String
+  finish_lte: String
+  finish_gt: String
+  finish_gte: String
+  finish_contains: String
+  finish_not_contains: String
+  finish_starts_with: String
+  finish_not_starts_with: String
+  finish_ends_with: String
+  finish_not_ends_with: String
+  AND: [TodoScalarWhereInput!]
+  OR: [TodoScalarWhereInput!]
+  NOT: [TodoScalarWhereInput!]
+}
+
+type TodoSubscriptionPayload {
+  mutation: MutationType!
+  node: Todo
+  updatedFields: [String!]
+  previousValues: TodoPreviousValues
+}
+
+input TodoSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: TodoWhereInput
+  AND: [TodoSubscriptionWhereInput!]
+  OR: [TodoSubscriptionWhereInput!]
+  NOT: [TodoSubscriptionWhereInput!]
+}
+
+input TodoUpdateDataInput {
+  createdBy: UserUpdateOneRequiredInput
+  content: String
+  tag: TagUpdateManyInput
+  status: String
+  start: String
+  finish: String
+}
+
+input TodoUpdateInput {
+  createdBy: UserUpdateOneRequiredInput
+  content: String
+  tag: TagUpdateManyInput
+  status: String
+  start: String
+  finish: String
+}
+
+input TodoUpdateManyDataInput {
+  content: String
+  status: String
+  start: String
+  finish: String
+}
+
+input TodoUpdateManyInput {
+  create: [TodoCreateInput!]
+  update: [TodoUpdateWithWhereUniqueNestedInput!]
+  upsert: [TodoUpsertWithWhereUniqueNestedInput!]
+  delete: [TodoWhereUniqueInput!]
+  connect: [TodoWhereUniqueInput!]
+  set: [TodoWhereUniqueInput!]
+  disconnect: [TodoWhereUniqueInput!]
+  deleteMany: [TodoScalarWhereInput!]
+  updateMany: [TodoUpdateManyWithWhereNestedInput!]
+}
+
+input TodoUpdateManyMutationInput {
+  content: String
+  status: String
+  start: String
+  finish: String
+}
+
+input TodoUpdateManyWithWhereNestedInput {
+  where: TodoScalarWhereInput!
+  data: TodoUpdateManyDataInput!
+}
+
+input TodoUpdateWithWhereUniqueNestedInput {
+  where: TodoWhereUniqueInput!
+  data: TodoUpdateDataInput!
+}
+
+input TodoUpsertWithWhereUniqueNestedInput {
+  where: TodoWhereUniqueInput!
+  update: TodoUpdateDataInput!
+  create: TodoCreateInput!
+}
+
+input TodoWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  createdBy: UserWhereInput
+  content: String
+  content_not: String
+  content_in: [String!]
+  content_not_in: [String!]
+  content_lt: String
+  content_lte: String
+  content_gt: String
+  content_gte: String
+  content_contains: String
+  content_not_contains: String
+  content_starts_with: String
+  content_not_starts_with: String
+  content_ends_with: String
+  content_not_ends_with: String
+  tag_every: TagWhereInput
+  tag_some: TagWhereInput
+  tag_none: TagWhereInput
+  status: String
+  status_not: String
+  status_in: [String!]
+  status_not_in: [String!]
+  status_lt: String
+  status_lte: String
+  status_gt: String
+  status_gte: String
+  status_contains: String
+  status_not_contains: String
+  status_starts_with: String
+  status_not_starts_with: String
+  status_ends_with: String
+  status_not_ends_with: String
+  start: String
+  start_not: String
+  start_in: [String!]
+  start_not_in: [String!]
+  start_lt: String
+  start_lte: String
+  start_gt: String
+  start_gte: String
+  start_contains: String
+  start_not_contains: String
+  start_starts_with: String
+  start_not_starts_with: String
+  start_ends_with: String
+  start_not_ends_with: String
+  finish: String
+  finish_not: String
+  finish_in: [String!]
+  finish_not_in: [String!]
+  finish_lt: String
+  finish_lte: String
+  finish_gt: String
+  finish_gte: String
+  finish_contains: String
+  finish_not_contains: String
+  finish_starts_with: String
+  finish_not_starts_with: String
+  finish_ends_with: String
+  finish_not_ends_with: String
+  AND: [TodoWhereInput!]
+  OR: [TodoWhereInput!]
+  NOT: [TodoWhereInput!]
+}
+
+input TodoWhereUniqueInput {
+  id: ID
 }
 
 type User {
@@ -72,6 +689,11 @@ input UserCreateInput {
   nickName: String!
   birth: String!
   googleId: String
+}
+
+input UserCreateOneInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
 }
 
 type UserEdge {
@@ -121,6 +743,14 @@ input UserSubscriptionWhereInput {
   NOT: [UserSubscriptionWhereInput!]
 }
 
+input UserUpdateDataInput {
+  email: String
+  password: String
+  nickName: String
+  birth: String
+  googleId: String
+}
+
 input UserUpdateInput {
   email: String
   password: String
@@ -135,6 +765,18 @@ input UserUpdateManyMutationInput {
   nickName: String
   birth: String
   googleId: String
+}
+
+input UserUpdateOneRequiredInput {
+  create: UserCreateInput
+  update: UserUpdateDataInput
+  upsert: UserUpsertNestedInput
+  connect: UserWhereUniqueInput
+}
+
+input UserUpsertNestedInput {
+  update: UserUpdateDataInput!
+  create: UserCreateInput!
 }
 
 input UserWhereInput {

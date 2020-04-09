@@ -15,7 +15,6 @@ export default {
         const hash = crypto.createHmac("sha256", HASHSECRET);
         hash.update(password);
         output = hash.digest("hex");
-        console.log("output in create : ", output);
       }
 
       try {

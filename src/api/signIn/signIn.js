@@ -14,13 +14,13 @@ export default {
       const hash = crypto.createHmac("sha256", HASHSECRET);
       hash.update(password);
       const output = hash.digest("hex");
-      console.log("password : ", password);
-      console.log("output : ", output);
-      console.log("HASHSECRET : ", HASHSECRET);
-      //저장된 유저 정보 가져오기
 
+      //저장된 유저 정보 가져오기
       const user = await prisma.user({ email });
-      console.log("user.password : ", user.password);
+      if (!user) {
+        throw new Error("there is no such a user");
+      }
+
       // 해슁 비교하기
       if (user.password === output) {
         return JSON.stringify({ token: generateToken(user.id), id: user.id });

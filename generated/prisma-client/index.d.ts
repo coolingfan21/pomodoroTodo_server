@@ -16,6 +16,9 @@ export type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> &
 export type Maybe<T> = T | undefined | null;
 
 export interface Exists {
+  pomo: (where?: PomoWhereInput) => Promise<boolean>;
+  tag: (where?: TagWhereInput) => Promise<boolean>;
+  todo: (where?: TodoWhereInput) => Promise<boolean>;
   user: (where?: UserWhereInput) => Promise<boolean>;
 }
 
@@ -38,6 +41,63 @@ export interface Prisma {
    * Queries
    */
 
+  pomo: (where: PomoWhereUniqueInput) => PomoNullablePromise;
+  pomoes: (args?: {
+    where?: PomoWhereInput;
+    orderBy?: PomoOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<Pomo>;
+  pomoesConnection: (args?: {
+    where?: PomoWhereInput;
+    orderBy?: PomoOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => PomoConnectionPromise;
+  tag: (where: TagWhereUniqueInput) => TagNullablePromise;
+  tags: (args?: {
+    where?: TagWhereInput;
+    orderBy?: TagOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<Tag>;
+  tagsConnection: (args?: {
+    where?: TagWhereInput;
+    orderBy?: TagOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => TagConnectionPromise;
+  todo: (where: TodoWhereUniqueInput) => TodoNullablePromise;
+  todoes: (args?: {
+    where?: TodoWhereInput;
+    orderBy?: TodoOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<Todo>;
+  todoesConnection: (args?: {
+    where?: TodoWhereInput;
+    orderBy?: TodoOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => TodoConnectionPromise;
   user: (where: UserWhereUniqueInput) => UserNullablePromise;
   users: (args?: {
     where?: UserWhereInput;
@@ -63,6 +123,54 @@ export interface Prisma {
    * Mutations
    */
 
+  createPomo: (data: PomoCreateInput) => PomoPromise;
+  updatePomo: (args: {
+    data: PomoUpdateInput;
+    where: PomoWhereUniqueInput;
+  }) => PomoPromise;
+  updateManyPomoes: (args: {
+    data: PomoUpdateManyMutationInput;
+    where?: PomoWhereInput;
+  }) => BatchPayloadPromise;
+  upsertPomo: (args: {
+    where: PomoWhereUniqueInput;
+    create: PomoCreateInput;
+    update: PomoUpdateInput;
+  }) => PomoPromise;
+  deletePomo: (where: PomoWhereUniqueInput) => PomoPromise;
+  deleteManyPomoes: (where?: PomoWhereInput) => BatchPayloadPromise;
+  createTag: (data: TagCreateInput) => TagPromise;
+  updateTag: (args: {
+    data: TagUpdateInput;
+    where: TagWhereUniqueInput;
+  }) => TagPromise;
+  updateManyTags: (args: {
+    data: TagUpdateManyMutationInput;
+    where?: TagWhereInput;
+  }) => BatchPayloadPromise;
+  upsertTag: (args: {
+    where: TagWhereUniqueInput;
+    create: TagCreateInput;
+    update: TagUpdateInput;
+  }) => TagPromise;
+  deleteTag: (where: TagWhereUniqueInput) => TagPromise;
+  deleteManyTags: (where?: TagWhereInput) => BatchPayloadPromise;
+  createTodo: (data: TodoCreateInput) => TodoPromise;
+  updateTodo: (args: {
+    data: TodoUpdateInput;
+    where: TodoWhereUniqueInput;
+  }) => TodoPromise;
+  updateManyTodoes: (args: {
+    data: TodoUpdateManyMutationInput;
+    where?: TodoWhereInput;
+  }) => BatchPayloadPromise;
+  upsertTodo: (args: {
+    where: TodoWhereUniqueInput;
+    create: TodoCreateInput;
+    update: TodoUpdateInput;
+  }) => TodoPromise;
+  deleteTodo: (where: TodoWhereUniqueInput) => TodoPromise;
+  deleteManyTodoes: (where?: TodoWhereInput) => BatchPayloadPromise;
   createUser: (data: UserCreateInput) => UserPromise;
   updateUser: (args: {
     data: UserUpdateInput;
@@ -88,6 +196,15 @@ export interface Prisma {
 }
 
 export interface Subscription {
+  pomo: (
+    where?: PomoSubscriptionWhereInput
+  ) => PomoSubscriptionPayloadSubscription;
+  tag: (
+    where?: TagSubscriptionWhereInput
+  ) => TagSubscriptionPayloadSubscription;
+  todo: (
+    where?: TodoSubscriptionWhereInput
+  ) => TodoSubscriptionPayloadSubscription;
   user: (
     where?: UserSubscriptionWhereInput
   ) => UserSubscriptionPayloadSubscription;
@@ -100,6 +217,26 @@ export interface ClientConstructor<T> {
 /**
  * Types
  */
+
+export type TodoOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "content_ASC"
+  | "content_DESC"
+  | "status_ASC"
+  | "status_DESC"
+  | "start_ASC"
+  | "start_DESC"
+  | "finish_ASC"
+  | "finish_DESC";
+
+export type TagOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "content_ASC"
+  | "content_DESC";
+
+export type PomoOrderByInput = "id_ASC" | "id_DESC" | "date_ASC" | "date_DESC";
 
 export type UserOrderByInput =
   | "id_ASC"
@@ -117,11 +254,90 @@ export type UserOrderByInput =
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
-export type UserWhereUniqueInput = AtLeastOne<{
+export type PomoWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
-  email?: Maybe<String>;
-  googleId?: Maybe<String>;
+  date?: Maybe<String>;
 }>;
+
+export interface TodoWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  createdBy?: Maybe<UserWhereInput>;
+  content?: Maybe<String>;
+  content_not?: Maybe<String>;
+  content_in?: Maybe<String[] | String>;
+  content_not_in?: Maybe<String[] | String>;
+  content_lt?: Maybe<String>;
+  content_lte?: Maybe<String>;
+  content_gt?: Maybe<String>;
+  content_gte?: Maybe<String>;
+  content_contains?: Maybe<String>;
+  content_not_contains?: Maybe<String>;
+  content_starts_with?: Maybe<String>;
+  content_not_starts_with?: Maybe<String>;
+  content_ends_with?: Maybe<String>;
+  content_not_ends_with?: Maybe<String>;
+  tag_every?: Maybe<TagWhereInput>;
+  tag_some?: Maybe<TagWhereInput>;
+  tag_none?: Maybe<TagWhereInput>;
+  status?: Maybe<String>;
+  status_not?: Maybe<String>;
+  status_in?: Maybe<String[] | String>;
+  status_not_in?: Maybe<String[] | String>;
+  status_lt?: Maybe<String>;
+  status_lte?: Maybe<String>;
+  status_gt?: Maybe<String>;
+  status_gte?: Maybe<String>;
+  status_contains?: Maybe<String>;
+  status_not_contains?: Maybe<String>;
+  status_starts_with?: Maybe<String>;
+  status_not_starts_with?: Maybe<String>;
+  status_ends_with?: Maybe<String>;
+  status_not_ends_with?: Maybe<String>;
+  start?: Maybe<String>;
+  start_not?: Maybe<String>;
+  start_in?: Maybe<String[] | String>;
+  start_not_in?: Maybe<String[] | String>;
+  start_lt?: Maybe<String>;
+  start_lte?: Maybe<String>;
+  start_gt?: Maybe<String>;
+  start_gte?: Maybe<String>;
+  start_contains?: Maybe<String>;
+  start_not_contains?: Maybe<String>;
+  start_starts_with?: Maybe<String>;
+  start_not_starts_with?: Maybe<String>;
+  start_ends_with?: Maybe<String>;
+  start_not_ends_with?: Maybe<String>;
+  finish?: Maybe<String>;
+  finish_not?: Maybe<String>;
+  finish_in?: Maybe<String[] | String>;
+  finish_not_in?: Maybe<String[] | String>;
+  finish_lt?: Maybe<String>;
+  finish_lte?: Maybe<String>;
+  finish_gt?: Maybe<String>;
+  finish_gte?: Maybe<String>;
+  finish_contains?: Maybe<String>;
+  finish_not_contains?: Maybe<String>;
+  finish_starts_with?: Maybe<String>;
+  finish_not_starts_with?: Maybe<String>;
+  finish_ends_with?: Maybe<String>;
+  finish_not_ends_with?: Maybe<String>;
+  AND?: Maybe<TodoWhereInput[] | TodoWhereInput>;
+  OR?: Maybe<TodoWhereInput[] | TodoWhereInput>;
+  NOT?: Maybe<TodoWhereInput[] | TodoWhereInput>;
+}
 
 export interface UserWhereInput {
   id?: Maybe<ID_Input>;
@@ -213,6 +429,104 @@ export interface UserWhereInput {
   NOT?: Maybe<UserWhereInput[] | UserWhereInput>;
 }
 
+export interface TagWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  content?: Maybe<String>;
+  content_not?: Maybe<String>;
+  content_in?: Maybe<String[] | String>;
+  content_not_in?: Maybe<String[] | String>;
+  content_lt?: Maybe<String>;
+  content_lte?: Maybe<String>;
+  content_gt?: Maybe<String>;
+  content_gte?: Maybe<String>;
+  content_contains?: Maybe<String>;
+  content_not_contains?: Maybe<String>;
+  content_starts_with?: Maybe<String>;
+  content_not_starts_with?: Maybe<String>;
+  content_ends_with?: Maybe<String>;
+  content_not_ends_with?: Maybe<String>;
+  AND?: Maybe<TagWhereInput[] | TagWhereInput>;
+  OR?: Maybe<TagWhereInput[] | TagWhereInput>;
+  NOT?: Maybe<TagWhereInput[] | TagWhereInput>;
+}
+
+export interface PomoWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  createdBy?: Maybe<UserWhereInput>;
+  todo_every?: Maybe<TodoWhereInput>;
+  todo_some?: Maybe<TodoWhereInput>;
+  todo_none?: Maybe<TodoWhereInput>;
+  date?: Maybe<String>;
+  date_not?: Maybe<String>;
+  date_in?: Maybe<String[] | String>;
+  date_not_in?: Maybe<String[] | String>;
+  date_lt?: Maybe<String>;
+  date_lte?: Maybe<String>;
+  date_gt?: Maybe<String>;
+  date_gte?: Maybe<String>;
+  date_contains?: Maybe<String>;
+  date_not_contains?: Maybe<String>;
+  date_starts_with?: Maybe<String>;
+  date_not_starts_with?: Maybe<String>;
+  date_ends_with?: Maybe<String>;
+  date_not_ends_with?: Maybe<String>;
+  AND?: Maybe<PomoWhereInput[] | PomoWhereInput>;
+  OR?: Maybe<PomoWhereInput[] | PomoWhereInput>;
+  NOT?: Maybe<PomoWhereInput[] | PomoWhereInput>;
+}
+
+export type TagWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
+
+export type TodoWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
+
+export type UserWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+  email?: Maybe<String>;
+  googleId?: Maybe<String>;
+}>;
+
+export interface PomoCreateInput {
+  id?: Maybe<ID_Input>;
+  createdBy: UserCreateOneInput;
+  todo?: Maybe<TodoCreateManyInput>;
+  date: String;
+}
+
+export interface UserCreateOneInput {
+  create?: Maybe<UserCreateInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
 export interface UserCreateInput {
   id?: Maybe<ID_Input>;
   email: String;
@@ -220,6 +534,289 @@ export interface UserCreateInput {
   nickName: String;
   birth: String;
   googleId?: Maybe<String>;
+}
+
+export interface TodoCreateManyInput {
+  create?: Maybe<TodoCreateInput[] | TodoCreateInput>;
+  connect?: Maybe<TodoWhereUniqueInput[] | TodoWhereUniqueInput>;
+}
+
+export interface TodoCreateInput {
+  id?: Maybe<ID_Input>;
+  createdBy: UserCreateOneInput;
+  content: String;
+  tag?: Maybe<TagCreateManyInput>;
+  status: String;
+  start?: Maybe<String>;
+  finish?: Maybe<String>;
+}
+
+export interface TagCreateManyInput {
+  create?: Maybe<TagCreateInput[] | TagCreateInput>;
+  connect?: Maybe<TagWhereUniqueInput[] | TagWhereUniqueInput>;
+}
+
+export interface TagCreateInput {
+  id?: Maybe<ID_Input>;
+  content: String;
+}
+
+export interface PomoUpdateInput {
+  createdBy?: Maybe<UserUpdateOneRequiredInput>;
+  todo?: Maybe<TodoUpdateManyInput>;
+  date?: Maybe<String>;
+}
+
+export interface UserUpdateOneRequiredInput {
+  create?: Maybe<UserCreateInput>;
+  update?: Maybe<UserUpdateDataInput>;
+  upsert?: Maybe<UserUpsertNestedInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
+export interface UserUpdateDataInput {
+  email?: Maybe<String>;
+  password?: Maybe<String>;
+  nickName?: Maybe<String>;
+  birth?: Maybe<String>;
+  googleId?: Maybe<String>;
+}
+
+export interface UserUpsertNestedInput {
+  update: UserUpdateDataInput;
+  create: UserCreateInput;
+}
+
+export interface TodoUpdateManyInput {
+  create?: Maybe<TodoCreateInput[] | TodoCreateInput>;
+  update?: Maybe<
+    | TodoUpdateWithWhereUniqueNestedInput[]
+    | TodoUpdateWithWhereUniqueNestedInput
+  >;
+  upsert?: Maybe<
+    | TodoUpsertWithWhereUniqueNestedInput[]
+    | TodoUpsertWithWhereUniqueNestedInput
+  >;
+  delete?: Maybe<TodoWhereUniqueInput[] | TodoWhereUniqueInput>;
+  connect?: Maybe<TodoWhereUniqueInput[] | TodoWhereUniqueInput>;
+  set?: Maybe<TodoWhereUniqueInput[] | TodoWhereUniqueInput>;
+  disconnect?: Maybe<TodoWhereUniqueInput[] | TodoWhereUniqueInput>;
+  deleteMany?: Maybe<TodoScalarWhereInput[] | TodoScalarWhereInput>;
+  updateMany?: Maybe<
+    TodoUpdateManyWithWhereNestedInput[] | TodoUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface TodoUpdateWithWhereUniqueNestedInput {
+  where: TodoWhereUniqueInput;
+  data: TodoUpdateDataInput;
+}
+
+export interface TodoUpdateDataInput {
+  createdBy?: Maybe<UserUpdateOneRequiredInput>;
+  content?: Maybe<String>;
+  tag?: Maybe<TagUpdateManyInput>;
+  status?: Maybe<String>;
+  start?: Maybe<String>;
+  finish?: Maybe<String>;
+}
+
+export interface TagUpdateManyInput {
+  create?: Maybe<TagCreateInput[] | TagCreateInput>;
+  update?: Maybe<
+    TagUpdateWithWhereUniqueNestedInput[] | TagUpdateWithWhereUniqueNestedInput
+  >;
+  upsert?: Maybe<
+    TagUpsertWithWhereUniqueNestedInput[] | TagUpsertWithWhereUniqueNestedInput
+  >;
+  delete?: Maybe<TagWhereUniqueInput[] | TagWhereUniqueInput>;
+  connect?: Maybe<TagWhereUniqueInput[] | TagWhereUniqueInput>;
+  set?: Maybe<TagWhereUniqueInput[] | TagWhereUniqueInput>;
+  disconnect?: Maybe<TagWhereUniqueInput[] | TagWhereUniqueInput>;
+  deleteMany?: Maybe<TagScalarWhereInput[] | TagScalarWhereInput>;
+  updateMany?: Maybe<
+    TagUpdateManyWithWhereNestedInput[] | TagUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface TagUpdateWithWhereUniqueNestedInput {
+  where: TagWhereUniqueInput;
+  data: TagUpdateDataInput;
+}
+
+export interface TagUpdateDataInput {
+  content?: Maybe<String>;
+}
+
+export interface TagUpsertWithWhereUniqueNestedInput {
+  where: TagWhereUniqueInput;
+  update: TagUpdateDataInput;
+  create: TagCreateInput;
+}
+
+export interface TagScalarWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  content?: Maybe<String>;
+  content_not?: Maybe<String>;
+  content_in?: Maybe<String[] | String>;
+  content_not_in?: Maybe<String[] | String>;
+  content_lt?: Maybe<String>;
+  content_lte?: Maybe<String>;
+  content_gt?: Maybe<String>;
+  content_gte?: Maybe<String>;
+  content_contains?: Maybe<String>;
+  content_not_contains?: Maybe<String>;
+  content_starts_with?: Maybe<String>;
+  content_not_starts_with?: Maybe<String>;
+  content_ends_with?: Maybe<String>;
+  content_not_ends_with?: Maybe<String>;
+  AND?: Maybe<TagScalarWhereInput[] | TagScalarWhereInput>;
+  OR?: Maybe<TagScalarWhereInput[] | TagScalarWhereInput>;
+  NOT?: Maybe<TagScalarWhereInput[] | TagScalarWhereInput>;
+}
+
+export interface TagUpdateManyWithWhereNestedInput {
+  where: TagScalarWhereInput;
+  data: TagUpdateManyDataInput;
+}
+
+export interface TagUpdateManyDataInput {
+  content?: Maybe<String>;
+}
+
+export interface TodoUpsertWithWhereUniqueNestedInput {
+  where: TodoWhereUniqueInput;
+  update: TodoUpdateDataInput;
+  create: TodoCreateInput;
+}
+
+export interface TodoScalarWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  content?: Maybe<String>;
+  content_not?: Maybe<String>;
+  content_in?: Maybe<String[] | String>;
+  content_not_in?: Maybe<String[] | String>;
+  content_lt?: Maybe<String>;
+  content_lte?: Maybe<String>;
+  content_gt?: Maybe<String>;
+  content_gte?: Maybe<String>;
+  content_contains?: Maybe<String>;
+  content_not_contains?: Maybe<String>;
+  content_starts_with?: Maybe<String>;
+  content_not_starts_with?: Maybe<String>;
+  content_ends_with?: Maybe<String>;
+  content_not_ends_with?: Maybe<String>;
+  status?: Maybe<String>;
+  status_not?: Maybe<String>;
+  status_in?: Maybe<String[] | String>;
+  status_not_in?: Maybe<String[] | String>;
+  status_lt?: Maybe<String>;
+  status_lte?: Maybe<String>;
+  status_gt?: Maybe<String>;
+  status_gte?: Maybe<String>;
+  status_contains?: Maybe<String>;
+  status_not_contains?: Maybe<String>;
+  status_starts_with?: Maybe<String>;
+  status_not_starts_with?: Maybe<String>;
+  status_ends_with?: Maybe<String>;
+  status_not_ends_with?: Maybe<String>;
+  start?: Maybe<String>;
+  start_not?: Maybe<String>;
+  start_in?: Maybe<String[] | String>;
+  start_not_in?: Maybe<String[] | String>;
+  start_lt?: Maybe<String>;
+  start_lte?: Maybe<String>;
+  start_gt?: Maybe<String>;
+  start_gte?: Maybe<String>;
+  start_contains?: Maybe<String>;
+  start_not_contains?: Maybe<String>;
+  start_starts_with?: Maybe<String>;
+  start_not_starts_with?: Maybe<String>;
+  start_ends_with?: Maybe<String>;
+  start_not_ends_with?: Maybe<String>;
+  finish?: Maybe<String>;
+  finish_not?: Maybe<String>;
+  finish_in?: Maybe<String[] | String>;
+  finish_not_in?: Maybe<String[] | String>;
+  finish_lt?: Maybe<String>;
+  finish_lte?: Maybe<String>;
+  finish_gt?: Maybe<String>;
+  finish_gte?: Maybe<String>;
+  finish_contains?: Maybe<String>;
+  finish_not_contains?: Maybe<String>;
+  finish_starts_with?: Maybe<String>;
+  finish_not_starts_with?: Maybe<String>;
+  finish_ends_with?: Maybe<String>;
+  finish_not_ends_with?: Maybe<String>;
+  AND?: Maybe<TodoScalarWhereInput[] | TodoScalarWhereInput>;
+  OR?: Maybe<TodoScalarWhereInput[] | TodoScalarWhereInput>;
+  NOT?: Maybe<TodoScalarWhereInput[] | TodoScalarWhereInput>;
+}
+
+export interface TodoUpdateManyWithWhereNestedInput {
+  where: TodoScalarWhereInput;
+  data: TodoUpdateManyDataInput;
+}
+
+export interface TodoUpdateManyDataInput {
+  content?: Maybe<String>;
+  status?: Maybe<String>;
+  start?: Maybe<String>;
+  finish?: Maybe<String>;
+}
+
+export interface PomoUpdateManyMutationInput {
+  date?: Maybe<String>;
+}
+
+export interface TagUpdateInput {
+  content?: Maybe<String>;
+}
+
+export interface TagUpdateManyMutationInput {
+  content?: Maybe<String>;
+}
+
+export interface TodoUpdateInput {
+  createdBy?: Maybe<UserUpdateOneRequiredInput>;
+  content?: Maybe<String>;
+  tag?: Maybe<TagUpdateManyInput>;
+  status?: Maybe<String>;
+  start?: Maybe<String>;
+  finish?: Maybe<String>;
+}
+
+export interface TodoUpdateManyMutationInput {
+  content?: Maybe<String>;
+  status?: Maybe<String>;
+  start?: Maybe<String>;
+  finish?: Maybe<String>;
 }
 
 export interface UserUpdateInput {
@@ -238,6 +835,39 @@ export interface UserUpdateManyMutationInput {
   googleId?: Maybe<String>;
 }
 
+export interface PomoSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<PomoWhereInput>;
+  AND?: Maybe<PomoSubscriptionWhereInput[] | PomoSubscriptionWhereInput>;
+  OR?: Maybe<PomoSubscriptionWhereInput[] | PomoSubscriptionWhereInput>;
+  NOT?: Maybe<PomoSubscriptionWhereInput[] | PomoSubscriptionWhereInput>;
+}
+
+export interface TagSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<TagWhereInput>;
+  AND?: Maybe<TagSubscriptionWhereInput[] | TagSubscriptionWhereInput>;
+  OR?: Maybe<TagSubscriptionWhereInput[] | TagSubscriptionWhereInput>;
+  NOT?: Maybe<TagSubscriptionWhereInput[] | TagSubscriptionWhereInput>;
+}
+
+export interface TodoSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<TodoWhereInput>;
+  AND?: Maybe<TodoSubscriptionWhereInput[] | TodoSubscriptionWhereInput>;
+  OR?: Maybe<TodoSubscriptionWhereInput[] | TodoSubscriptionWhereInput>;
+  NOT?: Maybe<TodoSubscriptionWhereInput[] | TodoSubscriptionWhereInput>;
+}
+
 export interface UserSubscriptionWhereInput {
   mutation_in?: Maybe<MutationType[] | MutationType>;
   updatedFields_contains?: Maybe<String>;
@@ -251,6 +881,60 @@ export interface UserSubscriptionWhereInput {
 
 export interface NodeNode {
   id: ID_Output;
+}
+
+export interface Pomo {
+  id: ID_Output;
+  date: String;
+}
+
+export interface PomoPromise extends Promise<Pomo>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdBy: <T = UserPromise>() => T;
+  todo: <T = FragmentableArray<Todo>>(args?: {
+    where?: TodoWhereInput;
+    orderBy?: TodoOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  date: () => Promise<String>;
+}
+
+export interface PomoSubscription
+  extends Promise<AsyncIterator<Pomo>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdBy: <T = UserSubscription>() => T;
+  todo: <T = Promise<AsyncIterator<TodoSubscription>>>(args?: {
+    where?: TodoWhereInput;
+    orderBy?: TodoOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  date: () => Promise<AsyncIterator<String>>;
+}
+
+export interface PomoNullablePromise
+  extends Promise<Pomo | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdBy: <T = UserPromise>() => T;
+  todo: <T = FragmentableArray<Todo>>(args?: {
+    where?: TodoWhereInput;
+    orderBy?: TodoOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  date: () => Promise<String>;
 }
 
 export interface User {
@@ -293,25 +977,113 @@ export interface UserNullablePromise
   googleId: () => Promise<String>;
 }
 
-export interface UserConnection {
-  pageInfo: PageInfo;
-  edges: UserEdge[];
+export interface Todo {
+  id: ID_Output;
+  content: String;
+  status: String;
+  start?: String;
+  finish?: String;
 }
 
-export interface UserConnectionPromise
-  extends Promise<UserConnection>,
+export interface TodoPromise extends Promise<Todo>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdBy: <T = UserPromise>() => T;
+  content: () => Promise<String>;
+  tag: <T = FragmentableArray<Tag>>(args?: {
+    where?: TagWhereInput;
+    orderBy?: TagOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  status: () => Promise<String>;
+  start: () => Promise<String>;
+  finish: () => Promise<String>;
+}
+
+export interface TodoSubscription
+  extends Promise<AsyncIterator<Todo>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdBy: <T = UserSubscription>() => T;
+  content: () => Promise<AsyncIterator<String>>;
+  tag: <T = Promise<AsyncIterator<TagSubscription>>>(args?: {
+    where?: TagWhereInput;
+    orderBy?: TagOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  status: () => Promise<AsyncIterator<String>>;
+  start: () => Promise<AsyncIterator<String>>;
+  finish: () => Promise<AsyncIterator<String>>;
+}
+
+export interface TodoNullablePromise
+  extends Promise<Todo | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdBy: <T = UserPromise>() => T;
+  content: () => Promise<String>;
+  tag: <T = FragmentableArray<Tag>>(args?: {
+    where?: TagWhereInput;
+    orderBy?: TagOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  status: () => Promise<String>;
+  start: () => Promise<String>;
+  finish: () => Promise<String>;
+}
+
+export interface Tag {
+  id: ID_Output;
+  content: String;
+}
+
+export interface TagPromise extends Promise<Tag>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  content: () => Promise<String>;
+}
+
+export interface TagSubscription
+  extends Promise<AsyncIterator<Tag>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  content: () => Promise<AsyncIterator<String>>;
+}
+
+export interface TagNullablePromise extends Promise<Tag | null>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  content: () => Promise<String>;
+}
+
+export interface PomoConnection {
+  pageInfo: PageInfo;
+  edges: PomoEdge[];
+}
+
+export interface PomoConnectionPromise
+  extends Promise<PomoConnection>,
     Fragmentable {
   pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<UserEdge>>() => T;
-  aggregate: <T = AggregateUserPromise>() => T;
+  edges: <T = FragmentableArray<PomoEdge>>() => T;
+  aggregate: <T = AggregatePomoPromise>() => T;
 }
 
-export interface UserConnectionSubscription
-  extends Promise<AsyncIterator<UserConnection>>,
+export interface PomoConnectionSubscription
+  extends Promise<AsyncIterator<PomoConnection>>,
     Fragmentable {
   pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateUserSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<PomoEdgeSubscription>>>() => T;
+  aggregate: <T = AggregatePomoSubscription>() => T;
 }
 
 export interface PageInfo {
@@ -335,6 +1107,168 @@ export interface PageInfoSubscription
   hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
   startCursor: () => Promise<AsyncIterator<String>>;
   endCursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface PomoEdge {
+  node: Pomo;
+  cursor: String;
+}
+
+export interface PomoEdgePromise extends Promise<PomoEdge>, Fragmentable {
+  node: <T = PomoPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface PomoEdgeSubscription
+  extends Promise<AsyncIterator<PomoEdge>>,
+    Fragmentable {
+  node: <T = PomoSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregatePomo {
+  count: Int;
+}
+
+export interface AggregatePomoPromise
+  extends Promise<AggregatePomo>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregatePomoSubscription
+  extends Promise<AsyncIterator<AggregatePomo>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface TagConnection {
+  pageInfo: PageInfo;
+  edges: TagEdge[];
+}
+
+export interface TagConnectionPromise
+  extends Promise<TagConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<TagEdge>>() => T;
+  aggregate: <T = AggregateTagPromise>() => T;
+}
+
+export interface TagConnectionSubscription
+  extends Promise<AsyncIterator<TagConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<TagEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateTagSubscription>() => T;
+}
+
+export interface TagEdge {
+  node: Tag;
+  cursor: String;
+}
+
+export interface TagEdgePromise extends Promise<TagEdge>, Fragmentable {
+  node: <T = TagPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface TagEdgeSubscription
+  extends Promise<AsyncIterator<TagEdge>>,
+    Fragmentable {
+  node: <T = TagSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateTag {
+  count: Int;
+}
+
+export interface AggregateTagPromise
+  extends Promise<AggregateTag>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateTagSubscription
+  extends Promise<AsyncIterator<AggregateTag>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface TodoConnection {
+  pageInfo: PageInfo;
+  edges: TodoEdge[];
+}
+
+export interface TodoConnectionPromise
+  extends Promise<TodoConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<TodoEdge>>() => T;
+  aggregate: <T = AggregateTodoPromise>() => T;
+}
+
+export interface TodoConnectionSubscription
+  extends Promise<AsyncIterator<TodoConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<TodoEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateTodoSubscription>() => T;
+}
+
+export interface TodoEdge {
+  node: Todo;
+  cursor: String;
+}
+
+export interface TodoEdgePromise extends Promise<TodoEdge>, Fragmentable {
+  node: <T = TodoPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface TodoEdgeSubscription
+  extends Promise<AsyncIterator<TodoEdge>>,
+    Fragmentable {
+  node: <T = TodoSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateTodo {
+  count: Int;
+}
+
+export interface AggregateTodoPromise
+  extends Promise<AggregateTodo>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateTodoSubscription
+  extends Promise<AsyncIterator<AggregateTodo>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface UserConnection {
+  pageInfo: PageInfo;
+  edges: UserEdge[];
+}
+
+export interface UserConnectionPromise
+  extends Promise<UserConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<UserEdge>>() => T;
+  aggregate: <T = AggregateUserPromise>() => T;
+}
+
+export interface UserConnectionSubscription
+  extends Promise<AsyncIterator<UserConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateUserSubscription>() => T;
 }
 
 export interface UserEdge {
@@ -384,6 +1318,147 @@ export interface BatchPayloadSubscription
   extends Promise<AsyncIterator<BatchPayload>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Long>>;
+}
+
+export interface PomoSubscriptionPayload {
+  mutation: MutationType;
+  node: Pomo;
+  updatedFields: String[];
+  previousValues: PomoPreviousValues;
+}
+
+export interface PomoSubscriptionPayloadPromise
+  extends Promise<PomoSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = PomoPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = PomoPreviousValuesPromise>() => T;
+}
+
+export interface PomoSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<PomoSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = PomoSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = PomoPreviousValuesSubscription>() => T;
+}
+
+export interface PomoPreviousValues {
+  id: ID_Output;
+  date: String;
+}
+
+export interface PomoPreviousValuesPromise
+  extends Promise<PomoPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  date: () => Promise<String>;
+}
+
+export interface PomoPreviousValuesSubscription
+  extends Promise<AsyncIterator<PomoPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  date: () => Promise<AsyncIterator<String>>;
+}
+
+export interface TagSubscriptionPayload {
+  mutation: MutationType;
+  node: Tag;
+  updatedFields: String[];
+  previousValues: TagPreviousValues;
+}
+
+export interface TagSubscriptionPayloadPromise
+  extends Promise<TagSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = TagPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = TagPreviousValuesPromise>() => T;
+}
+
+export interface TagSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<TagSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = TagSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = TagPreviousValuesSubscription>() => T;
+}
+
+export interface TagPreviousValues {
+  id: ID_Output;
+  content: String;
+}
+
+export interface TagPreviousValuesPromise
+  extends Promise<TagPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  content: () => Promise<String>;
+}
+
+export interface TagPreviousValuesSubscription
+  extends Promise<AsyncIterator<TagPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  content: () => Promise<AsyncIterator<String>>;
+}
+
+export interface TodoSubscriptionPayload {
+  mutation: MutationType;
+  node: Todo;
+  updatedFields: String[];
+  previousValues: TodoPreviousValues;
+}
+
+export interface TodoSubscriptionPayloadPromise
+  extends Promise<TodoSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = TodoPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = TodoPreviousValuesPromise>() => T;
+}
+
+export interface TodoSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<TodoSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = TodoSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = TodoPreviousValuesSubscription>() => T;
+}
+
+export interface TodoPreviousValues {
+  id: ID_Output;
+  content: String;
+  status: String;
+  start?: String;
+  finish?: String;
+}
+
+export interface TodoPreviousValuesPromise
+  extends Promise<TodoPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  content: () => Promise<String>;
+  status: () => Promise<String>;
+  start: () => Promise<String>;
+  finish: () => Promise<String>;
+}
+
+export interface TodoPreviousValuesSubscription
+  extends Promise<AsyncIterator<TodoPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  content: () => Promise<AsyncIterator<String>>;
+  status: () => Promise<AsyncIterator<String>>;
+  start: () => Promise<AsyncIterator<String>>;
+  finish: () => Promise<AsyncIterator<String>>;
 }
 
 export interface UserSubscriptionPayload {
@@ -472,6 +1547,18 @@ export type Long = string;
 export const models: Model[] = [
   {
     name: "User",
+    embedded: false
+  },
+  {
+    name: "Pomo",
+    embedded: false
+  },
+  {
+    name: "Todo",
+    embedded: false
+  },
+  {
+    name: "Tag",
     embedded: false
   }
 ];

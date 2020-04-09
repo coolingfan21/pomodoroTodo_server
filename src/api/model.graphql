@@ -4,4 +4,27 @@ type User {
   password: String
   nickName: String!
   birth: String!
+  googleId: String
+}
+
+type Pomo {
+  id: ID!
+  createdBy: User!
+  todo: [Todo]!
+  date: String!
+}
+
+type Todo {
+  id: ID!
+  createdBy: User!
+  content: String!
+  tag: [Tag]!
+  status: String!
+  start: String
+  finish: String
+}
+
+type Tag {
+  id: ID!
+  content: String!
 }

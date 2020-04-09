@@ -1,6 +1,7 @@
 import { GraphQLServer } from "graphql-yoga";
 import schema from "../schema";
 import { isAuthenticated } from "./middleware";
+import authenticateJwt from "./passport";
 // import passport from "./passport";
 // console.log("passport : ", passport);
 // import { prisma } from "../generated/prisma-client";
@@ -28,6 +29,7 @@ const server = new GraphQLServer({
 
 // google auth
 // server.express.get("/auth/google", passport);
+server.express.use(authenticateJwt);
 
 // server.start(options, ({ port }) => { // cors 포함
 // cors 제외
