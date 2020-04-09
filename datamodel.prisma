@@ -19,7 +19,7 @@ type Todo {
   createdBy: User!
   content: String!
   tag: [Tag]!
-  status: String!
+  status: String! @default(value:false)
   start: String
   finish: String
 }

@@ -1,0 +1,8 @@
+type Mutation {
+  createPomoTodo(
+    createdBy: String!
+    todoContent: String!
+    tagContent: [String]!
+    date: String!
+  ): Pomo!
+}
